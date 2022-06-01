@@ -6,13 +6,31 @@ import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
 import Greeter from '../../artifacts/contracts/Greeter.sol/Greeter.json'
+import Dwetransfer from '../../artifacts/contracts/Greeter.sol/Dwetransfer.json'
+import { ethers } from "ethers";
+
 
 var currentAccount = null;
-console.log(currentAccount);
+// const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+
+console.log("currentAccount:" + currentAccount);
 
 async function requestAccount() {
   currentAccount = await window.ethereum.request({ method: 'eth_requestAccounts' });
   console.log(currentAccount);
+}
+
+async function uploadFile() {
+  console.log("uploadFile fired...");
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const contract = new ethers.Contract(contractAddress, Dwetransfer.abi, provider)
+    try {
+      const data = await contract.uploadFile(1,"bafybeib5vdjq4aclwfolc4f3ajcnef4iutd7v7lkiq3savagrtlbwqlbti")
+      console.log('data: ', data)
+    } catch (err) {
+      console.log("Error: ", err)
+    } 
 }
 </script>
 
@@ -23,10 +41,16 @@ async function requestAccount() {
     </template>
     <template #heading>Greeter ABI</template>
 
-    <p>{{ Greeter.abi }}</p>
+    <p>Greeter.abi: {{ Greeter.abi }}</p>
 
-    <div v-if="currentAccount = null">
+    <p>Dwetransfer.abi: {{ Dwetransfer.abi }}</p>
+
+    <div v-if="currentAccount == []">
         <button class="primaryButton" @click="requestAccount">Connect Wallet</button>
+    </div>
+
+    <div v-if="currentAccount != []">
+      <button class="primaryButton" @click="uploadFile">Upload File</button>
     </div>
   </WelcomeItem>
   <WelcomeItem>
