@@ -12,7 +12,8 @@ import { ethers } from "ethers";
 
 var currentAccount = null;
 // const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+// const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 console.log("currentAccount:" + currentAccount);
 
@@ -24,6 +25,7 @@ async function requestAccount() {
 async function uploadFile() {
   console.log("uploadFile fired...");
     const provider = new ethers.providers.Web3Provider(window.ethereum)
+    signer = provider.getSigner()
     const contract = new ethers.Contract(contractAddress, Dwetransfer.abi, provider)
     try {
       const data = await contract.uploadFile(1,"bafybeib5vdjq4aclwfolc4f3ajcnef4iutd7v7lkiq3savagrtlbwqlbti")
@@ -45,7 +47,7 @@ async function uploadFile() {
 
     <p>Dwetransfer.abi: {{ Dwetransfer.abi }}</p>
 
-    <div v-if="currentAccount == []">
+    <div v-if="currentAccount = []">
         <button class="primaryButton" @click="requestAccount">Connect Wallet</button>
     </div>
 

@@ -22,7 +22,7 @@ contract Greeter {
 }
 
 contract Dwetransfer {
-    address payable developer_address = payable(0xcd3B766CCDd6AE721141F452C550Ca635964ce71);
+    address payable developer_address;
 
     struct File {
         uint id;
@@ -30,26 +30,30 @@ contract Dwetransfer {
         address[] downloaders;
     }
 
-    mapping(address => File) public files;
+    File file;
 
-    constructor() {}
+    mapping(uint => File) public files; //file.id => File
+    mapping(address => uint) public uploads; //address => 
+
+    constructor() {
+        developer_address = payable(msg.sender); //explain msg.sender and transaction origin <= owner of the person who deployed 
+    }
 
     function uploadFile(uint _file_id, string memory _file_cid) public payable {
-        require(msg.value > 100 wei, "You need at least 100 wei in your account");
+        require(msg.value >= 100 wei, "You need at least 100 wei in your account"); // change message 
         
-        developer_address.transfer(100 wei);
-
-        File memory file;
+        developer_address.transfer(msg.value);
 
         file.id = _file_id;
         file.cid = _file_cid;
         
-        files[msg.sender] = file;
+        files[file.id] = file;
+        uploads[msg.sender] = file.id;
     }
 
     function downloadFile(address payable _uploader_address, uint _file_id) public payable {
-        require(files[_uploader_address].id == _file_id, "The file you requested does not exist");
-        require(msg.value > 10 wei, "You need at least 10 wei in your account");
+        require(uploads[_uploader_address] == _file_id, "The file you requested does not exist.");
+        require(msg.value >= 10 wei, "You need to pay 10 wei exactly.");
 
         _uploader_address.transfer(8 wei);
         developer_address.transfer(2 wei);
