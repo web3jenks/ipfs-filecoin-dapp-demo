@@ -5,14 +5,11 @@ import ToolingIcon from './icons/IconTooling.vue'
 import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
-import Greeter from '../../artifacts/contracts/Greeter.sol/Greeter.json'
-import Dwetransfer from '../../artifacts/contracts/Greeter.sol/Dwetransfer.json'
+import Dwetransfer from '../../artifacts/contracts/Dwetransfer.sol/Dwetransfer.json'
 import { ethers } from "ethers";
 
 
 var currentAccount = null;
-// const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-// const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 console.log("currentAccount:" + currentAccount);
@@ -25,10 +22,10 @@ async function requestAccount() {
 async function uploadFile() {
   console.log("uploadFile fired...");
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    signer = provider.getSigner()
-    const contract = new ethers.Contract(contractAddress, Dwetransfer.abi, provider)
+    const signer = provider.getSigner()
+    const contract = new ethers.Contract(contractAddress, Dwetransfer.abi, signer)
     try {
-      const data = await contract.uploadFile(1,"bafybeib5vdjq4aclwfolc4f3ajcnef4iutd7v7lkiq3savagrtlbwqlbti")
+      const data = await contract.uploadFile(2,"bbb")
       console.log('data: ', data)
     } catch (err) {
       console.log("Error: ", err)
@@ -43,12 +40,10 @@ async function uploadFile() {
     </template>
     <template #heading>Greeter ABI</template>
 
-    <p>Greeter.abi: {{ Greeter.abi }}</p>
-
     <p>Dwetransfer.abi: {{ Dwetransfer.abi }}</p>
 
     <div v-if="currentAccount = []">
-        <button class="primaryButton" @click="requestAccount">Connect Wallet</button>
+      <button class="primaryButton" @click="requestAccount">Connect Wallet</button>
     </div>
 
     <div v-if="currentAccount != []">

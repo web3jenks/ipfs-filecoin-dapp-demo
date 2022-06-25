@@ -1,1 +1,0 @@
-# ipfs-filecoin-dapp-demo

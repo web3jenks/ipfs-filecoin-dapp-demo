@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Users/jenksguo/FileCoin/GitHub/jenks-guo-filecoin/ipfs-filecoin-dapp-demo/dwetransfer-dapp/contracts/Greeter.sol": {
-      "lastModificationDate": 1654224984803,
-      "contentHash": "ceaf90409a41e8a8d8c1e6ba23bb8f46",
-      "sourceName": "contracts/Greeter.sol",
+    "/Users/jenksguo/FileCoin/GitHub/jenks-guo-filecoin/ipfs-filecoin-dapp-demo/dwetransfer-dapp/contracts/Dwetransfer.sol": {
+      "lastModificationDate": 1656132576611,
+      "contentHash": "36c33c12ea999f2a51dded9851ba2ecb",
+      "sourceName": "contracts/Dwetransfer.sol",
       "solcConfig": {
         "version": "0.8.4",
         "settings": {
@@ -35,8 +35,7 @@
         "^0.8.0"
       ],
       "artifacts": [
-        "Dwetransfer",
-        "Greeter"
+        "Dwetransfer"
       ]
     },
     "/Users/jenksguo/FileCoin/GitHub/jenks-guo-filecoin/ipfs-filecoin-dapp-demo/dwetransfer-dapp/node_modules/hardhat/console.sol": {
