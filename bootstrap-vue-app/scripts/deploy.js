@@ -19,7 +19,7 @@ async function main() {
 
   await dwetransfer.deployed();
 
-  console.log("Greeter deployed to:", dwetransfer.address);
+  console.log("Dwetransfer deployed to:", dwetransfer.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

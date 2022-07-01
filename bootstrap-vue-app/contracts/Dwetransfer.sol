@@ -6,7 +6,7 @@ import "hardhat/console.sol";
 contract Dwetransfer {
     address payable owner_address;
 
-    uint public fileId = 0; //set fileId to 0
+    uint fileId = 0; //set fileId to 0
 
     struct File {
         uint id;
@@ -20,8 +20,8 @@ contract Dwetransfer {
     mapping(uint => File) public files; //to store files (fileId, File Object)
 
     //declaring events to emit to ETH chain
-    event FileUploaded(File file);
-    event FileDownload(File file);
+    event FileIdCreated(uint fileId);
+    event FileGetCid(string cid);
 
     receive() external payable {} 
 
@@ -29,33 +29,29 @@ contract Dwetransfer {
         owner_address = payable(msg.sender);
     }
 
-    function uploadFile(string memory _file_cid) public payable returns(uint) {
-        require(msg.value == 0.1 ether, "0.1 ether is required to upload a file."); //checks the amount
+    function uploadFile(string memory _filecid) external payable {
+        require(msg.value == 1 ether, "1 ether is required to upload a file."); //checks the amount
 
         fileId += 1; //increment fileId
 
         file.id = fileId;
-        file.cid = _file_cid;
+        file.cid = _filecid;
         file.uploader = msg.sender;
 
-        owner_address.transfer(0.1 ether);
+        owner_address.transfer(1 ether);
         
         files[file.id] = file;
 
-        emit FileUploaded(file);
-
-        return(fileId);
+        emit FileIdCreated(fileId);
     }
 
-    function downloadFile(uint _file_id) public payable returns (string memory) {
-        require(msg.value == 0.01 ether, "0.01 ehter is reuqired to download a file.");
+    function downloadFile(uint _file_id) external payable {
+        require(msg.value == 1 ether, "10 ehter is reuqired to download a file.");
 
-        payable(files[_file_id].uploader).transfer(0.008 ether);
-        owner_address.transfer(0.002 ether);
+        payable(files[_file_id].uploader).transfer(0.8 ether);
+        owner_address.transfer(0.2 ether);
 
-        emit FileDownload(files[_file_id]);
-
-        return files[_file_id].cid;
+        emit FileGetCid(files[_file_id].cid);
     }
 
     function uploaderWithdraw(uint _amount, uint _file_id) public {

@@ -13,15 +13,17 @@
           v-if="
             error === false && 
             cids.length === 0 && 
-            sending === false
+            sending === false &&
+            downloadFileId === undefined
             "
-            @update-cids="updateCids" @update-error="updateError" 
+            @update-cids="updateCids" @update-fileid="updateFileId" @update-error="updateError" 
         />
         <Success
           v-if="
             cids.length !== 0
             "
             @update-cids="updateCids"
+            :fileId="fileId"
         />
         <Error 
           v-if="
@@ -29,7 +31,14 @@
             " 
             @update-error="updateError"
         />
-
+        <FileDownloader
+          v-if="
+            downloadFileId !== undefined &&
+            error === false
+            "
+          :downloadFileId="downloadFileId"
+          @update-error="updateError"
+        /> 
         <br/>
 
         </b-card>
@@ -41,24 +50,34 @@
 import FileUploader from "./components/FileUploader.vue";
 import Success from "./components/Success.vue";
 import Error from "./components/Error.vue";
+import FileDownloader from "./components/FileDownloader.vue";
 
 export default {
   name: 'App',
+  mounted() {
+    this.downloadFileId = this.$route.query.downloadfileid;
+  },
   components: {
     FileUploader,
     Success,
-    Error
+    Error,
+    FileDownloader
   },
   data() {
     return {
       cids: [],
+      fileId: null,
       sending: false,
-      error: false
+      error: false,
+      downloadFileId: null
     }
   },
   methods: {
     updateCids(c) {
       this.cids = c
+    },
+    updateFileId(i) {
+      this.fileId = i
     },
     updateError(e) {
       this.error = e

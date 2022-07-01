@@ -1,7 +1,7 @@
 <template>
   <div class="error">
       <b-alert variant="danger" show>
-        Failed to upload to IPFS via Web3.Storage. Make sure you have selected a file to upload.
+        Failed to upload/download to IPFS via Web3.Storage. Make sure you have selected a file to upload.
       </b-alert>
 
       <b-button
