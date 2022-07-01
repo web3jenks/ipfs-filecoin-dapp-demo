@@ -5,7 +5,7 @@ Check out the original non-smart contract version of this app in React.js [here]
 
 The project uses [Web3.Storage JS SDK](https://web3.storage/docs/reference/js-client-library/#examples) to interact with IPFS & persist data on Filecoin. 
 
-This project was bootstrapped with [VueBootstrap version 3](https://bootstrap-vue.org/).
+This project was bootstrapped with [VueBootstrap version 2](https://bootstrap-vue.org/).
 
 A quick demo: 
 ![Jul-02-2022 06-01-52](https://user-images.githubusercontent.com/100632895/176961535-55fb6647-3952-4649-bd27-76deb0a0c908.gif)
