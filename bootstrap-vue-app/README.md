@@ -17,16 +17,6 @@ Upon successful payment. The app will present a download link with file ID to up
 
 There can be multiple uploaders and downloaders in this app. 
 
-##### File Upload Page
-
-
-##### Successfully payment & filed uploaded to IPFS 
-
-##### Download page & dweb.link page
-
-##### Error with Web3.Storage
->
-
 ## Before you run
 
 ### Setup Web3.Storage API key
