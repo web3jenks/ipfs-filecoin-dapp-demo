@@ -2,6 +2,7 @@
   <div id="FileUploader">
     <b-form-file
       v-model="files"
+      v-if="address!==null"
       :state="Boolean(files)"
       placeholder="Choose a file or drop it here..."
       :multiple="true"
@@ -10,22 +11,27 @@
     <br />
     <br /> 
 
-    <b-button
-      v-if="sending===false"
-      variant="primary"
-      @click="requestAccount()"
-    > 
-      Connect Wallet
-    </b-button>
+    <b-button-group v-if="sending===false">
+      <b-button
+        v-if="address===null"
+        variant="secondary"
+        @click="requestAccount()"
+      > 
+        Connect My Wallet
+      </b-button>
 
 
-    <b-button
-      v-if="sending===false"
-      variant="primary"
-      @click="uploadFile(files)"
-    > 
-      Upload via IPFS
-    </b-button>
+      <b-button
+        v-if="address!==null"
+        variant="primary"
+        @click="uploadFile(files)"
+      > 
+        Upload via IPFS
+      </b-button>
+      
+    </b-button-group>
+
+    <p v-if="address!==null && sending===false">{{ address }}</p>
 
     <div v-if="sending===true">
       <b-spinner label="Spinning"></b-spinner>
@@ -46,16 +52,24 @@
     data() {
       return {
         files: null,
-        sending: false
+        sending: false,
+        address: null
       }
     },
     methods: {
 
       async requestAccount() {
         var currentAccount = null;
-        
+
+        if(window.ethereum) {
+          console.log("Metamask detected");
+        } else {
+          console.log("Metamask not detected...");
+        }
 
         currentAccount = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        this.address = currentAccount;
         
         console.log("Current Account :" + currentAccount);
       },
@@ -70,21 +84,27 @@
           const provider = new ethers.providers.Web3Provider(window.ethereum)
           const signer = provider.getSigner()
           const contract = new ethers.Contract(contractAddress, Dwetransfer.abi, signer)
-          
+          const options = {value: ethers.utils.parseEther("0.1")};
+          var rootCid = "";
+
           try {
-            const data = await contract.uploadFile(2,"bbb")
-            console.log('data: ', data)
-          } catch(err) {
-             console.log("Error: ", err)
+              this.sending = true;
+              rootCid = await client.put(files);
+              console.log("contract executed successfully!")
+          } catch {
+            this.sending = false;
+            this.$emit('update-error', true);
+            console.log("Failed to send file... ");
           }
 
-            this.sending = true;
-            const rootCid = await client.put(files);
-            this.sending = false;
-            this.$emit('update-cids', [rootCid]);
-            console.log("Successfully sent to IPFS");
-            console.log("https://" + rootCid + ".ipfs.dweb.link");
-            console.log("rootCid :" + [rootCid]);
+          var output = await contract.uploadFile(rootCid, options);
+          var fileId = ethers.utils.defaultAbiCoder.decode(["uint256"], output.data)
+          this.sending = false;
+          this.$emit('update-cids', [rootCid]);
+          console.log("Successfully sent to IPFS");
+          console.log("https://localhost:8080/download/" + fileId);
+          console.log(output);
+          console.log("rootCid :" + [rootCid]);
             
         } catch {
             this.$emit('update-error', true);

@@ -4,50 +4,67 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 contract Dwetransfer {
-    address payable developer_address;
+    address payable owner_address;
+
+    uint public fileId = 0; //set fileId to 0
 
     struct File {
         uint id;
         string cid;
         address[] downloaders;
         address uploader;
-    }
+    } //declaring the File struct
 
     File file;
 
-    mapping(uint => File) public files; //file.id => File
+    mapping(uint => File) public files; //to store files (fileId, File Object)
 
+    //declaring events to emit to ETH chain
     event FileUploaded(File file);
     event FileDownload(File file);
 
     receive() external payable {} 
 
     constructor() payable {
-        developer_address = payable(msg.sender); //explain msg.sender and transaction origin <= owner of the person who deployed 
+        owner_address = payable(msg.sender);
     }
 
-    function uploadFile(uint _file_id, string memory _file_cid) external payable {
-        require(msg.value == 100, "You need at least 100 wei in your account"); // change message 
+    function uploadFile(string memory _file_cid) public payable returns(uint) {
+        require(msg.value == 0.1 ether, "0.1 ether is required to upload a file."); //checks the amount
 
-        file.id = _file_id;
+        fileId += 1; //increment fileId
+
+        file.id = fileId;
         file.cid = _file_cid;
         file.uploader = msg.sender;
 
-        developer_address.transfer(1 ether);
+        owner_address.transfer(0.1 ether);
         
         files[file.id] = file;
 
         emit FileUploaded(file);
+
+        return(fileId);
     }
 
-    function downloadFile(uint _file_id) external payable returns (string memory) {
-        require(msg.value == 10, "You need to pay 10 wei exactly.");
+    function downloadFile(uint _file_id) public payable returns (string memory) {
+        require(msg.value == 0.01 ether, "0.01 ehter is reuqired to download a file.");
 
-        payable(files[_file_id].uploader).transfer(8);
-        payable(msg.sender).transfer(2);
+        payable(files[_file_id].uploader).transfer(0.008 ether);
+        owner_address.transfer(0.002 ether);
 
         emit FileDownload(files[_file_id]);
 
         return files[_file_id].cid;
+    }
+
+    function uploaderWithdraw(uint _amount, uint _file_id) public {
+        require(msg.sender == files[_file_id].uploader);
+        payable(msg.sender).transfer(_amount);
+    }
+
+    function ownerWithdraw(uint _amount) public {
+        require(payable(msg.sender) == owner_address );
+        owner_address.transfer(_amount);
     }
 }
