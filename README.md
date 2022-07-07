@@ -1,5 +1,5 @@
 # Dwetransfer IPFS Demo App
-This web application is created to demonstrate how Web3.storage can be used in a Ethereum smart contract powered Dapp. 
+This web application is created to demonstrate how Web3.Storage can be used in a Ethereum smart contract powered Dapp. 
 
 Check out the original non-smart contract version of this app in React.js [here](https://github.com/jenks-guo-filecoin/ipfs-filecoin-storage-demo). 
 
@@ -11,9 +11,11 @@ A quick demo:
 ![Jul-02-2022 06-01-52](https://user-images.githubusercontent.com/100632895/176961535-55fb6647-3952-4649-bd27-76deb0a0c908.gif)
 
 ## How does it work?
-The single page Vue.js application will take one or more files uploaded via a HTML form and use the client.put(files) method provided by web3.storage SDK to upload them to IPFS & filecoin. The application has a Ethereum smart contract writen in solidity, it take payment before uploading and downloading so developer & file uploader can withdraw later. 
+The single page Vue.js application will take one or more files uploaded via a HTML form and use the client.put(files) method provided by web3.storage SDK to upload them to IPFS & Filecoin. The application has an Ethereum smart contract written in Solidity, a key feature is that it requires payment before uploading and downloading so developer & file uploader can withdraw later. This trust-minimized and decentralized peer-to-peer payment methodology is enabled by the Ethereum technology.  IPFS & Filecoin provide immutability and permanence to the files.
 
-Upon successful payment. The app will present a download link with file ID to uploader to share with downloader. The downloader, once paid, will retrieve the dweb.link powered IPFS CID link to download. 
+Upon successful payment the app will present a download link with file ID to uploader to share with downloader. 
+
+The downloader, once paid, will retrieve the dweb.link powered IPFS CID link to download. 
 
 There can be multiple uploaders and downloaders in this app. 
 
